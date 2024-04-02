@@ -45,7 +45,8 @@ class UsersController <ApplicationController
   
   def login_user
     user = User.find_by(email: params[:email])
-    
+    cookies.encrypted[:location] = params[:location]
+     
     if user && user.authenticate(params[:password])
       flash[:success] = "Welcome back, #{user.name}"
       redirect_to user_path(user.id)

@@ -45,14 +45,13 @@ class UsersController <ApplicationController
   
   def login_user
     user = User.find_by(email: params[:email])
-    if user.authenticate(params[:password])
+    
+    if user && user.authenticate(params[:password])
       flash[:success] = "Welcome back, #{user.name}"
       redirect_to user_path(user.id)
-    elsif user.errors[:email]
-      flash[:error] = "Invalid email"
+    else
+      flash[:error] = "Invalid email or password"
       render :login_form
-    elsif user.errors[:password]
-      flash[:error] = "Invalid password"
     end
   end
   

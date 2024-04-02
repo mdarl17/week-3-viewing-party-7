@@ -38,6 +38,23 @@ class UsersController <ApplicationController
       redirect_to register_path
     end
   end
+
+  def login_form
+    
+  end
+  
+  def login_user
+    user = User.find_by(email: params[:email])
+    if user.authenticate(params[:password])
+      flash[:success] = "Welcome back, #{user.name}"
+      redirect_to user_path(user.id)
+    elsif user.errors[:email]
+      flash[:error] = "Invalid email"
+      render :login_form
+    elsif user.errors[:password]
+      flash[:error] = "Invalid password"
+    end
+  end
   
   private 
 

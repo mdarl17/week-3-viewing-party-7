@@ -4,8 +4,8 @@ RSpec.describe 'Landing Page' do
   before :each do 
     User.delete_all
 
-    user1 = User.create!(name: "User One", email: "user1@test.com", password: "pass123", password_confirmation: "pass123")
-    user2 = User.create!(name: "User Two", email: "user2@test.com", password: "pass456", password_confirmation: "pass456")
+    @user1 = User.create!(name: "User One", email: "user1@test.com", password: "pass123", password_confirmation: "pass123")
+    @user2 = User.create!(name: "User Two", email: "user2@test.com", password: "pass456", password_confirmation: "pass456")
     visit '/'
   end 
 
@@ -24,17 +24,24 @@ RSpec.describe 'Landing Page' do
     expect(current_path).to eq(root_path)
   end 
 
-  it 'lists out existing users' do
-    user1 = User.create(name: "User One", email: "user1@test.com", password: "pass123", password_confirmation: "pass123")
-    user2 = User.create(name: "User Two", email: "user2@test.com", password: "pass456", password_confirmation: "pass456")
+  it 'if user is logged in, it displays existing users' do
+    user3 = User.create!(name: "User Three", email: "user3@test.com", password: "pass789", password_confirmation: "pass789")
+    visit login_path 
+
+    fill_in :email, with: user3.email
+    fill_in :password, with: user3.password
+
+    click_button "Log In"
+
+    visit root_path
 
     expect(page).to have_content('Existing Users:')
 
     within('.existing-users') do 
-      expect(page).to have_content(user1.email)
-      expect(page).to have_content(user2.email)
-    end     
-  end 
+      expect(page).to have_content(@user1.email)
+      expect(page).to have_content(@user2.email)
+    end
+  end
 
   it "has a link to log in" do
     User.delete_all

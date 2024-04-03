@@ -67,7 +67,6 @@ RSpec.describe "Login Page", type: :feature do
 		expect(page).to have_content("Bloomington, IN")
 
 		visit("https://www.nfl.com")
-
 		visit(user_path(user.id))
 		
 		expect(page).to have_content("Matt's Dashboard")

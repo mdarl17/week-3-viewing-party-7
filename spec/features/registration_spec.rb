@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "User Registration" do
   it 'can create a user with a name, unique email, password, and matching password confirmation' do
+    User.delete_all
+
     visit register_path
 
     fill_in :user_name, with: 'User One'
@@ -10,6 +12,7 @@ RSpec.describe "User Registration" do
     fill_in :user_password_confirmation, with: 'pass123'
     
     click_button 'Create New User'
+    
     user = User.last
 
     expect(current_path).to eq(user_path(user.id))

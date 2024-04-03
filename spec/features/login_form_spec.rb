@@ -68,10 +68,6 @@ RSpec.describe "Login Page", type: :feature do
 
 		visit("https://www.nfl.com")
 
-		visit(root_path)
-
-		click_link "Log In"
-
 		visit(user_path(user.id))
 		
 		expect(page).to have_content("Matt's Dashboard")

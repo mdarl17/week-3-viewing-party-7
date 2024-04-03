@@ -13,8 +13,16 @@ RSpec.describe 'Movies Index Page' do
   end 
 
   it 'shows all movies' do 
-    visit "users/#{@user1.id}"
+    location = "Sloan's Lake, CO"
 
+    visit login_path
+
+    fill_in :email, with: @user1.email
+    fill_in :password, with: @user1.password
+    fill_in :location, with: location
+
+    click_button 'Log In'
+    
     click_button "Find Top Rated Movies"
 
     expect(current_path).to eq("/users/#{@user1.id}/movies")

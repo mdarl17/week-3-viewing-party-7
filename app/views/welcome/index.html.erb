@@ -7,9 +7,11 @@
   <% end %>
 </section>
 
-<section class='existing-users'>
-  <p>Existing Users: </p>
-  <% @users.each do |user| %>
-    <li><%= link_to user.email, user_path(user.id) %></li>
-  <% end %>
-</section>
+<% if current_user %>
+  <section class='existing-users'>
+    <p>Existing Users: </p>
+    <% @users.each do |user| %>
+      <li><%= user.email %></li>
+    <% end %>
+  </section>
+<% end %>

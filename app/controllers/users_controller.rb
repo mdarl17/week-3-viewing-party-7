@@ -4,14 +4,23 @@ class UsersController <ApplicationController
   end 
 
   def show 
-    @user = User.find(params[:id])
+    if current_user
+      @user = User.find(params[:id])
+      render :show
+      return
+    else
+      flash[:error] = "You must be logged in to see the dashboard"
+      redirect_to root_path
+    end
   end 
 
   def create 
     @user = User.new(user_params)
     if @user.save && @user.authenticate(user_params[:password])
+      session[:user_id] = @user.id
+      cookies[:expires] = 3.days.from_now
       flash[:success] = "Welcome, #{@user.name}!"
-      redirect_to user_path(id: @user.id)
+      redirect_to user_path(@user.id)
 
     elsif @user.errors[:email].include?("has already been taken")
       flash[:error] = "Email validation error: Email has already been taken"
@@ -45,6 +54,7 @@ class UsersController <ApplicationController
   
   def login_user
     @user = User.find_by(email: params[:email])
+
     if @user && @user.authenticate(params[:password])
       session[:user_id] = @user.id
       cookies.encrypted[:location] = params[:location]

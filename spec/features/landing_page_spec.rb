@@ -85,4 +85,39 @@ RSpec.describe 'Landing Page' do
     
     visit root_path
   end
+
+  it "when I'm logged out I don't see existing users" do 
+    visit root_path
+
+    expect(page).to_not have_content("Existing Users")
+
+    visit login_path
+
+    fill_in :email, with: "user1@test.com"
+    fill_in :password, with: "pass123"
+  
+    click_button "Log In"
+    
+    visit root_path
+
+    expect(page).to have_content("Existing Users")
+  end
+
+  it "logged in users see other existing users on the landing page as text, not links to other user dashboards" do
+    visit login_path
+
+    fill_in :email, with: "user1@test.com"
+    fill_in :password, with: "pass123"
+  
+    click_button "Log In"
+    
+    visit root_path
+
+    expect(page).to have_content("Existing Users")
+    
+    User.all.each do |user|
+      expect(page).to_not have_link(user.email)
+      expect(page).to have_content(user.email)
+    end
+  end
 end

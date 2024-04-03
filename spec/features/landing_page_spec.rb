@@ -2,8 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'Landing Page' do
   before :each do 
-    user1 = User.create(name: "User One", email: "user1@test.com", password: "pass123", password_confirmation: "pass123")
-    user2 = User.create(name: "User Two", email: "user2@test.com", password: "pass456", password_confirmation: "pass456")
+    User.delete_all
+
+    user1 = User.create!(name: "User One", email: "user1@test.com", password: "pass123", password_confirmation: "pass123")
+    user2 = User.create!(name: "User Two", email: "user2@test.com", password: "pass456", password_confirmation: "pass456")
     visit '/'
   end 
 
@@ -56,5 +58,31 @@ RSpec.describe 'Landing Page' do
     click_button "Log In"
 
     expect(current_path).to eq(user_path(User.last.id))
+  end
+
+  it "if a user is logged in, the login/create new user links are disabled and logout link is enabled" do 
+    visit login_path
+
+    fill_in :email, with: "user1@test.com"
+    fill_in :password, with: "pass123"
+  
+    click_button "Log In"
+    
+    visit root_path
+
+    expect(page).to have_button("Logout")
+    expect(page).to_not have_link("Log In")
+    expect(page).to_not have_link("Create New User")
+  end
+
+  it "if a user is logged out, the login/create new user links are enables, and the logout button is disabled" do 
+    visit login_path
+
+    fill_in :email, with: "user1@test.com"
+    fill_in :password, with: "pass123"
+  
+    click_button "Log In"
+    
+    visit root_path
   end
 end

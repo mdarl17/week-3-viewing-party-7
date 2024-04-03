@@ -35,6 +35,8 @@ RSpec.describe 'Landing Page' do
   end 
 
   it "has a link to log in" do
+    User.delete_all
+    
     user = User.create!(name: "Matt", email: "mdarl17@gmail.com", password: "pass123", password_confirmation: "pass123")
     
     visit "/"

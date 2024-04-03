@@ -60,7 +60,9 @@ class UsersController <ApplicationController
 
   def logout
     cookies.delete :location
+    cookies.delete :expires_at
     reset_session
+    redirect_to root_path
   end
   
   private 

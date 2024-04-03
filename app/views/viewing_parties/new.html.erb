@@ -1,6 +1,6 @@
 <h1>Create a Viewing Party</h1>
 
-<%= form_with url: "/users/#{@user.id}/movies/#{@movie.id}/viewing_parties", local: true do |form| %>
+<%= form_with url: "/users/#{@user.id}/movies/#{@movie.id}/viewing_parties", data: {turbo: false} local: true do |form| %>
   <%= form.label :title %>
   <%= form.text_field :email, value: @movie.title %><br>
   <%= form.label :time %>
